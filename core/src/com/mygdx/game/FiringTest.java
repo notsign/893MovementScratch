@@ -42,19 +42,15 @@ public class FiringTest implements Screen, InputProcessor {
 
     private void initializeWorld() {
         world = new World(new Vector2(0, -200), true);
-        // create contact listener in the class itself so i don't need to turn every variable into a static when i call it
         world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact c) {
-
             }
 
             @Override
             public void endContact(Contact c) {
                 Fixture fa = c.getFixtureA();
                 Fixture fb = c.getFixtureB();
-                // only checking if one of the fixtures is the foot sensor - if the foot sensor is one of the contacts,
-                // then the other fixture is something it's allowed to collide with (maskBit = 1)
                 if (fa.getFilterData().categoryBits == 1) {
                     player.isGrounded = false;
                 } else if (fb.getFilterData().categoryBits == 1) {
@@ -64,9 +60,6 @@ public class FiringTest implements Screen, InputProcessor {
 
             @Override
             public void preSolve(Contact c, Manifold oldManifold) {
-                // i use presolve rather than beginContact because presolve runs right when the collision occurs
-                // beginContact occurs when they begin to touch, leading to loss of accuracy
-                // basically begincontact sucks
                 Fixture fa = c.getFixtureA();
                 Fixture fb = c.getFixtureB();
 
@@ -79,23 +72,20 @@ public class FiringTest implements Screen, InputProcessor {
 
             @Override
             public void postSolve(Contact c, ContactImpulse impulse) {
-                Fixture fa = c.getFixtureA();
-                Fixture fb = c.getFixtureB();
+
+
             }
         });
-        map = new Map(world, "testmap");
-        // pass world and desired map
+        map = new Map(world, "debug");
     }
 
     private void initializeCamera() {
         b2dr = new Box2DDebugRenderer();
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 32 * 19, 32 * 10);
-        // tile size * first two digits of resolution give you a solid camera, i just divide by 2 for a better view
-        // two is a magic number
+        camera.setToOrtho(false, 64 * (19 / 2), 64 * (10 / 2));
+        //camera.setToOrtho(false, 32 * 19, 32 * 10);
         camera.update();
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map.getMap(), map.getUnitScale());
-        // important: go to getUnitScale function in Map
     }
 
     private void initializePlayer() {
@@ -119,13 +109,12 @@ public class FiringTest implements Screen, InputProcessor {
         b2dr.render(world, camera.combined);
 
         batch.setProjectionMatrix(camera.combined);
-        // set the projection matrix as the camera so the tile layer on the map lines up with the bodies
-        // if this line wasn't here it wouldn't scale down
         batch.begin();
-        //player.draw(batch);
+        player.draw(batch);
         batch.end();
 
         player.move();
+
     }
 
     @Override
@@ -157,7 +146,7 @@ public class FiringTest implements Screen, InputProcessor {
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.X && player.isGrounded) {
             player.jump();
-            player.isGrounded = false;
+            player.isGrounded = true;
         }
         return false;
     }

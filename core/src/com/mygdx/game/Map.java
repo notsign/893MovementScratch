@@ -18,7 +18,7 @@ public class Map {
     Map(World world, String mapName) {
         this.mapName = mapName;
         b2dmop = new Box2DMapObjectParser();
-        b2dmop.load(world, new TmxMapLoader().load("maps/" + mapName + ".tmx"));
+        b2dmop.load(world, new TmxMapLoader().load("maps/rooms/" + mapName + ".tmx"));
         b2dmop.getBodies();
         b2dmop.getFixtures();
         b2dmop.getJoints();
@@ -32,11 +32,11 @@ public class Map {
     }
 
     public TiledMap getMap() {
-        return new TmxMapLoader().load("maps/" + this.mapName + ".tmx");
+        return new TmxMapLoader().load("maps/rooms/" + this.mapName + ".tmx");
     }
 
     public float getUnitScale() {
-        //b2dmop.setUnitScale(0.5f);
+        //b2dmop.setUnitScale(0.75f);
         return b2dmop.getUnitScale();
     }
 
@@ -49,7 +49,7 @@ public class Map {
     public Vector2 getSpawnpoint() {
         MapLayer layer = this.getMap().getLayers().get("Object Layer 1");
         RectangleMapObject spawnpoint = (RectangleMapObject) layer.getObjects().get("spawn point");
-        return new Vector2(spawnpoint.getRectangle().getX(), spawnpoint.getRectangle().getY());
+        return new Vector2(spawnpoint.getRectangle().getX() * 2, spawnpoint.getRectangle().getY() * 2);
     }
 
     void pauseBGM() {
