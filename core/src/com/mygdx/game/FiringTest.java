@@ -76,7 +76,7 @@ public class FiringTest implements Screen, InputProcessor {
 
             }
         });
-        map = new Map(world, "debug");
+        map = new Map(world, "debugroom");
     }
 
     private void initializeCamera() {

@@ -36,7 +36,7 @@ public class Map {
     }
 
     public float getUnitScale() {
-        //b2dmop.setUnitScale(0.75f);
+        b2dmop.setUnitScale(0.5f);
         return b2dmop.getUnitScale();
     }
 

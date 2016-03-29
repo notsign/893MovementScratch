@@ -139,6 +139,7 @@ public class Player {
     boolean isGrounded = true;
 
     void jump() {
+        isGrounded = false;
         //mainBody.applyLinearImpulse(new Vector2(0, mainBody.getMass() * 500), mainBody.getWorldCenter(), true);
         mainBody.setLinearVelocity(new Vector2(0, mainBody.getMass() * 500));
     }
