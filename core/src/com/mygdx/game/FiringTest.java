@@ -146,7 +146,6 @@ public class FiringTest implements Screen, InputProcessor {
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.X && player.isGrounded) {
             player.jump();
-            player.isGrounded = true;
         }
         return false;
     }

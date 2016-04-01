@@ -88,6 +88,10 @@ public class Player {
     void draw(SpriteBatch sb) {
         elapsedTime++;
         if (isIdle) {
+            if (isGrounded) {
+                mainBody.setGravityScale(0);
+                mainBody.setLinearVelocity(0, 0);
+            }
             TextureRegion trIdle = aniIdle.getKeyFrame(elapsedTime, true);
             if (bRight) {
                 sb.draw(trIdle, mainBody.getPosition().x - sIdle[0].getWidth() / 4, mainBody.getPosition().y - sIdle[0].getHeight() / 4, sIdle[0].getWidth() / 2, sIdle[0].getHeight() / 2);
@@ -95,6 +99,7 @@ public class Player {
                 sb.draw(trIdle, mainBody.getPosition().x + sIdle[0].getWidth() / 4, mainBody.getPosition().y - sIdle[0].getHeight() / 4, -sIdle[0].getWidth() / 2, sIdle[0].getHeight() / 2);
             }
         } else {
+            mainBody.setGravityScale(1);
             TextureRegion trRun = aniRun.getKeyFrame(elapsedTime, true);
             if (bRight) {
                 sb.draw(trRun, mainBody.getPosition().x - sIdle[0].getWidth() / 4, mainBody.getPosition().y - sIdle[0].getHeight() / 4, sRun[0].getWidth() / 2, sRun[0].getHeight() / 2);
@@ -102,11 +107,6 @@ public class Player {
                 sb.draw(trRun, mainBody.getPosition().x + sIdle[0].getWidth() / 4, mainBody.getPosition().y - sIdle[0].getHeight() / 4, -sRun[0].getWidth() / 2, sRun[0].getHeight() / 2);
             }
         }
-    }
-
-    void idle() {
-        if (isGrounded)
-            mainBody.setLinearVelocity(0, 0);
     }
 
     void move() {
@@ -139,8 +139,7 @@ public class Player {
     boolean isGrounded = true;
 
     void jump() {
-        isGrounded = false;
-        //mainBody.applyLinearImpulse(new Vector2(0, mainBody.getMass() * 500), mainBody.getWorldCenter(), true);
+        isGrounded = true;
         mainBody.setLinearVelocity(new Vector2(0, mainBody.getMass() * 500));
     }
 
