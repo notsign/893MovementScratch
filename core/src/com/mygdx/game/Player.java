@@ -88,10 +88,6 @@ public class Player {
     void draw(SpriteBatch sb) {
         elapsedTime++;
         if (isIdle) {
-            if (isGrounded) {
-                mainBody.setGravityScale(0);
-                mainBody.setLinearVelocity(0, 0);
-            }
             TextureRegion trIdle = aniIdle.getKeyFrame(elapsedTime, true);
             if (bRight) {
                 sb.draw(trIdle, mainBody.getPosition().x - sIdle[0].getWidth() / 4, mainBody.getPosition().y - sIdle[0].getHeight() / 4, sIdle[0].getWidth() / 2, sIdle[0].getHeight() / 2);
@@ -99,7 +95,6 @@ public class Player {
                 sb.draw(trIdle, mainBody.getPosition().x + sIdle[0].getWidth() / 4, mainBody.getPosition().y - sIdle[0].getHeight() / 4, -sIdle[0].getWidth() / 2, sIdle[0].getHeight() / 2);
             }
         } else {
-            mainBody.setGravityScale(1);
             TextureRegion trRun = aniRun.getKeyFrame(elapsedTime, true);
             if (bRight) {
                 sb.draw(trRun, mainBody.getPosition().x - sIdle[0].getWidth() / 4, mainBody.getPosition().y - sIdle[0].getHeight() / 4, sRun[0].getWidth() / 2, sRun[0].getHeight() / 2);
@@ -113,21 +108,11 @@ public class Player {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             isIdle = false;
             bRight = false;
-            /*if (isGrounded) {
-                mainBody.setLinearVelocity(-100, mainBody.getLinearVelocity().y);
-            } else {
-                mainBody.setLinearVelocity(-100, 0);
-            }*/
-            mainBody.setLinearVelocity(-100, mainBody.getLinearVelocity().y);
+            mainBody.setLinearVelocity(mainBody.getMass() * -100, mainBody.getLinearVelocity().y);
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             isIdle = false;
             bRight = true;
-            /*if (isGrounded) {
-                mainBody.setLinearVelocity(100, mainBody.getLinearVelocity().y);
-            } else {
-                mainBody.setLinearVelocity(100, 0);
-            }*/
-            mainBody.setLinearVelocity(100, mainBody.getLinearVelocity().y);
+            mainBody.setLinearVelocity(mainBody.getMass() * 100, mainBody.getLinearVelocity().y);
         }
     }
 
@@ -139,7 +124,7 @@ public class Player {
     boolean isGrounded = true;
 
     void jump() {
-        isGrounded = true;
+        isGrounded = false;
         mainBody.setLinearVelocity(new Vector2(0, mainBody.getMass() * 500));
     }
 
@@ -150,5 +135,4 @@ public class Player {
     void setLinearVelocity(Vector2 velocity) {
         mainBody.setLinearVelocity(velocity);
     }
-
 }

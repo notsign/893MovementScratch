@@ -22,6 +22,7 @@ public class Map {
         b2dmop.getBodies();
         b2dmop.getFixtures();
         b2dmop.getJoints();
+        //b2dmop.setUnitScale(0.01f);
         bgmName = getBGM();
         if (!bgmName.equals("none")) {
             bgm = new BGM(bgmName);
@@ -36,7 +37,7 @@ public class Map {
     }
 
     public float getUnitScale() {
-        b2dmop.setUnitScale(0.5f);
+
         return b2dmop.getUnitScale();
     }
 
