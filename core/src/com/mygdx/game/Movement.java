@@ -2,11 +2,11 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
 
-public class Firing extends Game {
+public class Movement extends Game {
 
     @Override
     public void create() {
-        setScreen(new FiringTest(this));
+        setScreen(new MovementTest(this));
     }
 
     @Override
