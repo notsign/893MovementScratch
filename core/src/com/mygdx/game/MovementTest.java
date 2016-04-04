@@ -145,17 +145,11 @@ public class MovementTest implements Screen, InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        if (keycode == Input.Keys.X && player.isGrounded) {
-            player.jump();
-        }
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        if (keycode == com.badlogic.gdx.Input.Keys.LEFT || keycode == com.badlogic.gdx.Input.Keys.RIGHT) {
-            player.stop();
-        }
         return false;
     }
 
