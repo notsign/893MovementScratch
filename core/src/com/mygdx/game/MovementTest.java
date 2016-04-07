@@ -46,34 +46,41 @@ public class MovementTest implements Screen, InputProcessor {
         world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact c) {
+				Fixture fa = c.getFixtureA();
+				Fixture fb = c.getFixtureB();
+
+				if(fa.isSensor() && fb.isSensor())
+					return; // Who cares about that?
+
+				if(fa.isSensor() && player.footSensor == fa)
+					player.isGrounded = true;
+
+				else if(fb.isSensor() && player.footSensor == fb)
+					player.isGrounded = true;
             }
 
             @Override
-            public void endContact(Contact c) {
-                Fixture fa = c.getFixtureA();
-                Fixture fb = c.getFixtureB();
-                if (fa.getFilterData().categoryBits == 1) {
-                    player.isGrounded = false;
-                } else if (fb.getFilterData().categoryBits == 1) {
-                    player.isGrounded = false;
-                }
+            public void endContact(Contact contact) {
+                Fixture fa = contact.getFixtureA();
+                Fixture fb = contact.getFixtureB();
+
+				if(fa.isSensor() && fb.isSensor())
+					return; // Who cares about that?
+
+				if(fa.isSensor() && fa == player.footSensor)
+					player.isGrounded = false;
+
+				else if(fb.isSensor() && fb == player.footSensor)
+					player.isGrounded = false;
             }
 
             @Override
             public void preSolve(Contact c, Manifold oldManifold) {
-                Fixture fa = c.getFixtureA();
-                Fixture fb = c.getFixtureB();
 
-                if (fa.getFilterData().categoryBits == 1) {
-                    player.isGrounded = true;
-                } else if (fb.getFilterData().categoryBits == 1) {
-                    player.isGrounded = true;
-                }
             }
 
             @Override
             public void postSolve(Contact c, ContactImpulse impulse) {
-
 
             }
         });
