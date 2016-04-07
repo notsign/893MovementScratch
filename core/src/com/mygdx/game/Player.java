@@ -28,7 +28,7 @@ public class Player {
 	Sprite[] sIdle = new Sprite[9];
 	Sprite[] sRun = new Sprite[9];
 	Animation aniIdle, aniRun;
-	float elapsedTime = 0;
+	int animationTime = 0;
 	World world;
 
 	boolean bRight = true, isIdle = true;
@@ -81,16 +81,16 @@ public class Player {
 	}
 
 	void draw(SpriteBatch sb) {
-		elapsedTime++;
+		animationTime++;
 		if(isIdle) {
-			TextureRegion trIdle = aniIdle.getKeyFrame(elapsedTime, true);
+			TextureRegion trIdle = aniIdle.getKeyFrame(animationTime, true);
 			if(bRight) {
 				sb.draw(trIdle, body.getPosition().x - sIdle[0].getWidth() / 4, body.getPosition().y - sIdle[0].getHeight() / 4, sIdle[0].getWidth() / 2, sIdle[0].getHeight() / 2);
 			} else {
 				sb.draw(trIdle, body.getPosition().x + sIdle[0].getWidth() / 4, body.getPosition().y - sIdle[0].getHeight() / 4, -sIdle[0].getWidth() / 2, sIdle[0].getHeight() / 2);
 			}
 		} else {
-			TextureRegion trRun = aniRun.getKeyFrame(elapsedTime, true);
+			TextureRegion trRun = aniRun.getKeyFrame(animationTime, true);
 			if(bRight) {
 				sb.draw(trRun, body.getPosition().x - sIdle[0].getWidth() / 4, body.getPosition().y - sIdle[0].getHeight() / 4, sRun[0].getWidth() / 2, sRun[0].getHeight() / 2);
 			} else {
@@ -108,14 +108,17 @@ public class Player {
 
 			if(touchX > width - (width / 3f) && touchY > height - (height / 3f)) { // Bottom right
 				body.setLinearVelocity(100f, body.getLinearVelocity().y);
+				isIdle = false;
 				bRight = true;
 			} else if(touchX < (width / 3f) && touchY > height - (height / 3f)) { // Bottom left
 				body.setLinearVelocity(-100f, body.getLinearVelocity().y);
+				isIdle = false;
 				bRight = false;
 			} else if(isGrounded && touchY > height - (height / 3)) { // Bottom middle
 				jump();
 			}
 		} else {
+			isIdle = true;
 			stop();
 		}
 	}
