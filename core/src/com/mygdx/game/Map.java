@@ -10,7 +10,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import net.dermetfan.gdx.physics.box2d.Box2DMapObjectParser;
 
 public class Map {
-
     Box2DMapObjectParser b2dmop;
     String mapName, bgmName;
     BGM bgm;
@@ -22,8 +21,8 @@ public class Map {
         b2dmop.getBodies();
         b2dmop.getFixtures();
         b2dmop.getJoints();
-        //b2dmop.setUnitScale(0.01f);
         bgmName = getBGM();
+
         if (!bgmName.equals("none")) {
             bgm = new BGM(bgmName);
             bgm.setLooping(true);
