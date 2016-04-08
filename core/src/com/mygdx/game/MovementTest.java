@@ -52,10 +52,10 @@ public class MovementTest implements Screen, InputProcessor {
 				if(fa.isSensor() && fb.isSensor())
 					return; // Who cares about that?
 
-				if(fa.isSensor() && player.footSensor == fa)
+				if(fa == player.footSensor)
 					player.isGrounded = true;
 
-				else if(fb.isSensor() && player.footSensor == fb)
+				else if(fb == player.footSensor)
 					player.isGrounded = true;
             }
 
@@ -67,10 +67,10 @@ public class MovementTest implements Screen, InputProcessor {
 				if(fa.isSensor() && fb.isSensor())
 					return; // Who cares about that?
 
-				if(fa.isSensor() && fa == player.footSensor)
+				if(fa == player.footSensor)
 					player.isGrounded = false;
 
-				else if(fb.isSensor() && fb == player.footSensor)
+				else if(fb == player.footSensor)
 					player.isGrounded = false;
             }
 
