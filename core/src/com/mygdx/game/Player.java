@@ -14,7 +14,6 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.ui.Value;
 
 /**
  * Created by k9sty on 2016-03-12.
@@ -23,30 +22,44 @@ import com.badlogic.gdx.scenes.scene2d.ui.Value;
 public class Player {
 	Body body;
 	Fixture footSensor;
-	TextureAtlas taIdle = new TextureAtlas(Gdx.files.internal("player/idle/idle.pack"));
-	TextureAtlas taRun = new TextureAtlas(Gdx.files.internal("player/run/run.pack"));
-	Sprite[] sIdle = new Sprite[9];
-	Sprite[] sRun = new Sprite[9];
+	TextureAtlas taIdle;
+	TextureAtlas taRun;
+	Sprite[] sprIdle;
+	Sprite[] sprRun;
 	Animation aniIdle, aniRun;
-	int animationTime = 0;
 	World world;
 
-	boolean bRight = true, isIdle = true;
+	float animationTime;
+	boolean bRight, isIdle;
 
 	Player(World world, Vector2 spawnpoint) {
 		this.world = world;
+
+		taIdle = new TextureAtlas(Gdx.files.internal("player/idle/idle.pack"));
+		taRun = new TextureAtlas(Gdx.files.internal("player/run/run.pack"));
+		animationTime = 0f;
+
+		sprIdle = new Sprite[9];
+		sprRun = new Sprite[9];
+
+		for(int i = 1; i < 10; i++) {
+			sprIdle[i - 1] = new Sprite(taIdle.findRegion("idle (" + i + ")"));
+			sprRun[i - 1] = new Sprite(taRun.findRegion("run (" + i + ")"));
+		}
+
+		aniIdle = new Animation(10, sprIdle);
+		aniRun = new Animation(5, sprRun);
+
+		bRight = true;
+		isIdle = true;
+
 		createBody(spawnpoint);
 		createFootSensor();
 	}
 
 	private void createBody(Vector2 spawnpoint) {
-		for(int i = 1; i < 10; i++) {
-			sIdle[i - 1] = new Sprite(taIdle.findRegion("idle (" + i + ")"));
-			sRun[i - 1] = new Sprite(taRun.findRegion("run (" + i + ")"));
-		}
-		aniIdle = new Animation(10, sIdle);
-		aniRun = new Animation(5, sRun);
 		BodyDef bodyDef = new BodyDef();
+		FixtureDef fdefPlayer = new FixtureDef();
 		PolygonShape shape = new PolygonShape();
 
 		bodyDef.position.set(new Vector2(spawnpoint.x / 2, spawnpoint.y / 2));
@@ -54,8 +67,7 @@ public class Player {
 		body = world.createBody(bodyDef);
 		body.setFixedRotation(true);
 
-		shape.setAsBox(sIdle[0].getWidth() / 4, sIdle[0].getHeight() / 4);
-		FixtureDef fdefPlayer = new FixtureDef();
+		shape.setAsBox(sprIdle[0].getWidth() / 4, sprIdle[0].getHeight() / 4);
 		fdefPlayer.shape = shape;
 		fdefPlayer.friction = 1;
 		body.setSleepingAllowed(false);
@@ -65,9 +77,12 @@ public class Player {
 
 	private void createFootSensor() {
 		PolygonShape shape = new PolygonShape();
-
-		shape.setAsBox(sIdle[0].getWidth() / 4, 0.2f, new Vector2(body.getLocalCenter().x, body.getLocalCenter().y - sIdle[0].getHeight() / 4), 0);
 		FixtureDef fdefFoot = new FixtureDef();
+
+		// TODO: Figure this out
+		shape.setAsBox(sprIdle[0].getWidth() / 4, 0.2f, new Vector2(body.getLocalCenter().x, body.getLocalCenter().y - sprIdle[0].getHeight() / 4), 0);
+		//shape.setAsBox(1f, 1f, new Vector2(body.getLocalCenter().x, body.getPosition().y), 0f);
+
 		fdefFoot.isSensor = true;
 		fdefFoot.shape = shape;
 
@@ -85,16 +100,16 @@ public class Player {
 		if(isIdle) {
 			TextureRegion trIdle = aniIdle.getKeyFrame(animationTime, true);
 			if(bRight) {
-				sb.draw(trIdle, body.getPosition().x - sIdle[0].getWidth() / 4, body.getPosition().y - sIdle[0].getHeight() / 4, sIdle[0].getWidth() / 2, sIdle[0].getHeight() / 2);
+				sb.draw(trIdle, body.getPosition().x - sprIdle[0].getWidth() / 4, body.getPosition().y - sprIdle[0].getHeight() / 4, sprIdle[0].getWidth() / 2, sprIdle[0].getHeight() / 2);
 			} else {
-				sb.draw(trIdle, body.getPosition().x + sIdle[0].getWidth() / 4, body.getPosition().y - sIdle[0].getHeight() / 4, -sIdle[0].getWidth() / 2, sIdle[0].getHeight() / 2);
+				sb.draw(trIdle, body.getPosition().x + sprIdle[0].getWidth() / 4, body.getPosition().y - sprIdle[0].getHeight() / 4, -sprIdle[0].getWidth() / 2, sprIdle[0].getHeight() / 2);
 			}
 		} else {
 			TextureRegion trRun = aniRun.getKeyFrame(animationTime, true);
 			if(bRight) {
-				sb.draw(trRun, body.getPosition().x - sIdle[0].getWidth() / 4, body.getPosition().y - sIdle[0].getHeight() / 4, sRun[0].getWidth() / 2, sRun[0].getHeight() / 2);
+				sb.draw(trRun, body.getPosition().x - sprIdle[0].getWidth() / 4, body.getPosition().y - sprIdle[0].getHeight() / 4, sprRun[0].getWidth() / 2, sprRun[0].getHeight() / 2);
 			} else {
-				sb.draw(trRun, body.getPosition().x + sIdle[0].getWidth() / 4, body.getPosition().y - sIdle[0].getHeight() / 4, -sRun[0].getWidth() / 2, sRun[0].getHeight() / 2);
+				sb.draw(trRun, body.getPosition().x + sprIdle[0].getWidth() / 4, body.getPosition().y - sprIdle[0].getHeight() / 4, -sprRun[0].getWidth() / 2, sprRun[0].getHeight() / 2);
 			}
 		}
 	}
