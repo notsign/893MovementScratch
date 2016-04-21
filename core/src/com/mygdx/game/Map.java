@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
 import net.dermetfan.gdx.physics.box2d.Box2DMapObjectParser;
-//
+
 public class Map {
     Box2DMapObjectParser b2dmop;
     String mapName, bgmName;
