@@ -6,7 +6,7 @@ public class Movement extends Game {
 
     @Override
     public void create() {
-        setScreen(new MovementTest(this));
+        setScreen(new ScrMovement(this));
     }
 
     @Override

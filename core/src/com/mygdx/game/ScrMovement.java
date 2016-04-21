@@ -23,7 +23,7 @@ import com.badlogic.gdx.physics.box2d.World;
 /**
  * Created by kesty on 3/21/2016.
  */
-public class MovementTest implements Screen, InputProcessor {
+public class ScrMovement implements Screen, InputProcessor {
     Game game;
     World world;
     Map map;
@@ -33,7 +33,7 @@ public class MovementTest implements Screen, InputProcessor {
     Player player;
     SpriteBatch batch = new SpriteBatch();
 
-    MovementTest(Game game) {
+    ScrMovement(Game game) {
         this.game = game;
 
         initializeWorld();
